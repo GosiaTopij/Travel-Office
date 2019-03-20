@@ -43,8 +43,4 @@ public class Address {
         this.zip = zip;
         this.city = city;
     }
-
-    String getInfo () {
-        return street + ", " + zip +", "+ city ;
-    }
 }

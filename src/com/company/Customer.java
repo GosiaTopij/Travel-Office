@@ -46,23 +46,4 @@ public class Customer {
         this.trip = trip;
     }
 
-    String getInfo () {
-        return name + ", " + address.getInfo() +", "+ trip.getInfo() ;
-    }
-
-//    void addCustomer(Customer[] customers, Customer customer) {
-//
-//        for (int i = 0; i< customers.length; i++) {
-//            if (customers[i] == null) {
-//                customers[i] = customer;
-//                break;
-//            }
-//            if (customers[i] != null && customers[customers.length-1] != null)
-//            {
-//                Customer customersCopy[] = Arrays.copyOf(customers,customers.length+1);
-//                customersCopy[customers.length] = customer;
-//            }
-//        }
-//    }
-
 }

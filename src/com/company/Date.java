@@ -11,13 +11,15 @@ public class Date {
         this.year = year;
     }
 
-    public static Date of(String str){
-        String[] parts = str.split("-");
-        String part0 = parts[0];
-        String part1 = parts[1];
-        String part2 = parts[2];
-        Date date = new Date(Integer.parseInt(part0),Integer.parseInt(part1),Integer.parseInt(part2));
-        return date;
+    public static Date of(String s, String separator) {
+        String[] array = s.split(separator);
+        if (array.length != 3) {
+            return null;
+        }
+        int year = Integer.parseInt(array[0]);
+        int month = Integer.parseInt(array[1]);
+        int day = Integer.parseInt(array[2]);
+        return new Date(year, month, day);
     }
 
     public int getDay() {
@@ -47,10 +49,6 @@ public class Date {
     @Override
     public String toString() {
         return year + "-" + month + "-" + day;
-    }
-
-    String getInfo () {
-        return "Date: " + year + "-" + month + "-" + day ;
     }
 
 }

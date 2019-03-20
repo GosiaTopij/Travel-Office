@@ -1,11 +1,17 @@
 package com.company;
 
-public class Trip {
+public abstract class Trip {
 
     private Date start;
     private Date end;
     private String destination;
     private double price;
+
+    public Trip(Date start, Date end, String destination) {
+        this.start = start;
+        this.end = end;
+        this.destination = destination;
+    }
 
     public double getPrice() {
         return price;
@@ -47,16 +53,5 @@ public class Trip {
 
     public void setDestination(String destination) {
         this.destination = destination;
-    }
-
-    public Trip(Date start, Date end, String destination, double price) {
-        this.start = start;
-        this.end = end;
-        this.destination = destination;
-        this.price = price;
-    }
-
-    String getInfo () {
-        return start.getInfo() + ", " + end.getInfo() + ", "+ destination ;
     }
 }

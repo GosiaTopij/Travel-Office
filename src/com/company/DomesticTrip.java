@@ -3,6 +3,10 @@ package com.company;
 public class DomesticTrip extends Trip {
     private double ownArrivalDiscount;
 
+    public DomesticTrip(Date start, Date end, String destination) {
+        super(start, end, destination);
+    }
+
     public double getOwnArrivalDiscount() {
         return ownArrivalDiscount;
     }
@@ -11,13 +15,9 @@ public class DomesticTrip extends Trip {
         this.ownArrivalDiscount = ownArrivalDiscount;
     }
 
-    public DomesticTrip(Date start, Date end, String destination, double price, double ownArrivalDiscount) {
-        super(start, end, destination, price);
-        this.ownArrivalDiscount = ownArrivalDiscount;
-    }
-
+    @Override
     public double getPrice() {
-        return getPrice() - ownArrivalDiscount ;
+        return super.getPrice() - ownArrivalDiscount;
     }
 
 }

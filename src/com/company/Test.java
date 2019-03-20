@@ -1,45 +1,61 @@
 package com.company;
 
+import java.util.Scanner;
+
 public class Test {
     public static void main(String[] args) {
 
+        TravelOffice travelO = new TravelOffice();
+        MainHandler mainHandler = new MainHandler(travelO);
 
-        // utworz biuro podrozy
-        TravelOffice to = new TravelOffice();
-
-        // budujemy wycieczke
-        Trip trip = new Trip(new Date(2017, 8, 1), new Date(2017, 8, 15), "Egipt",5000.0);
-
-        // budujemy pierwszego klienta
-        Customer customer = new Customer("Jan Kowalski");
-        customer.setAddress(new Address("Marszalkowska 10", "00-876", "Warszawa"));
-        customer.assignTrip(trip);
-        to.addCustomer(customer); // dodajemy go do biura
-
-        customer = new Customer("Jozef Nowak");
-        customer.setAddress(new Address("Al. Jerozolimskie 120", "00-345", "Warszawa"));
-        customer.assignTrip(trip);
-        to.addCustomer(customer); // dodajemy go do biura
-
-        customer = new Customer("Jaroslaw Lis");
-        customer.setAddress(new Address("Swietokrzyska 14", "00-666", "Warszawa"));
-        customer.assignTrip(trip);
-        to.addCustomer(customer); // dodajemy go do biura
-
-        System.out.println(to.getInfo());
-
-        Trip trip1 = new DomesticTrip(new Date(2017, 8, 1), new Date(2017, 8, 15), "Paryż",5000.0,1000.0);
-
-        Trip trip2 = new AbroadTrip(new Date(2016, 8, 1), new Date(2016, 8, 15), "Majorka",8000.0,2000.0);
-        trip1.toString();
-
-        System.out.println("Data: ");
-
-        String str = "11-44-55";
-   //     Date d1 = Date.of(str);
-        Date.of(str).toString();
-        Date d = new Date(11,22,55);
-        d.toString();
-
+        Scanner scan = new Scanner(System.in);
+        top:
+        while (true) {
+            System.out.println("Wybierz co chcesz zrobić: ");
+            System.out.println("1. Dodaj klienta");
+            System.out.println("2. Dodaj wycieczke");
+            System.out.println("3. Przypisz wycieczke do klienta");
+            System.out.println("4. Usuń klientae");
+            System.out.println("5. Usuń wycieczke");
+            System.out.println("6. Pokaż klientów");
+            System.out.println("7. Pokaż wycieczki");
+            System.out.println("8. Wyjdź");
+            int choice;
+            if (scan.hasNextInt()) {
+                choice = scan.nextInt();
+            } else {
+                scan.next();
+                continue;
+            }
+            switch (choice) {
+                case 1:
+                    mainHandler.addCustomer();
+                    break;
+                case 2:
+                    mainHandler.addTrip();
+                    break;
+                case 3:
+                    mainHandler.assign();
+                    break;
+                case 4:
+                    mainHandler.removeCustomer();
+                    break;
+                case 5:
+                    mainHandler.removeTrip();
+                    break;
+                case 6:
+                    mainHandler.showCustomers();
+                    break;
+                case 7:
+                    mainHandler.showTrips();
+                    break;
+                case 8:
+                    break top;
+                default:
+                    break;
+            }
+        }
+        scan.close();
     }
 }
+

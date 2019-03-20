@@ -3,9 +3,8 @@ package com.company;
 public class AbroadTrip extends Trip {
     private double insurance;
 
-    public AbroadTrip(Date start, Date end, String destination, double price, double insurance) {
-        super(start, end, destination, price);
-        this.insurance = insurance;
+    public AbroadTrip(Date start, Date end, String destination) {
+        super(start, end, destination);
     }
 
     public double getInsurance() {
