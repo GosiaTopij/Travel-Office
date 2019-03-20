@@ -5,10 +5,10 @@ public class Date {
     private int month;
     private int year;
 
-    public Date(int day, int month, int year) {
-        this.day = day;
-        this.month = month;
+    public Date(int year, int month, int day) {
         this.year = year;
+        this.month = month;
+        this.day = day;
     }
 
     public static Date of(String s, String separator) {

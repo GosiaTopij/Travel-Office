@@ -1,6 +1,5 @@
 package com.company;
 
-import java.util.Map;
 import java.util.Scanner;
 
 public class MainHandler implements UserInterface {
@@ -16,9 +15,7 @@ public class MainHandler implements UserInterface {
     @Override
     public Customer addCustomer() {
         System.out.print("Podaj imie: ");
-        String fname = scanner.next();
-        System.out.print("Podaj nazwisko: ");
-        String lname = scanner.next();
+        String name = scanner.next();
         System.out.print("Podaj ulice: ");
         String street = scanner.next();
         System.out.print("Podaj kod kreskowy: ");
@@ -27,7 +24,7 @@ public class MainHandler implements UserInterface {
         String city = scanner.next();
 
         Address address = new Address(street, zip, city);
-        Customer customer = new Customer(fname + " " + lname);
+        Customer customer = new Customer(name);
         customer.setAddress(address);
         travelOffice.addCustomer(customer);
 
@@ -37,106 +34,88 @@ public class MainHandler implements UserInterface {
 
     @Override
     public Trip addTrip() {
-        System.out.print("Trip id? ");
+        System.out.print("Id wycieczki: ");
         String id = scanner.next();
-
-        System.out.print("Trip destination? ");
+        System.out.print("Podaj date startową: (yyyy-mm-dd)");
+        String startDate = scanner.next();
+        System.out.print("Podaj date końcową: (yyyy-mm-dd)");
+        String endDate = scanner.next();
+        System.out.print("Podaj cel podróży: ");
         String destination = scanner.next();
-
-        System.out.print("Trip start date (dd-mm-yyyy)? ");
-        String start = scanner.next();
-        Date startDate = Date.of(start, "-");
-
-        System.out.print("Trip end date (dd-mm-yyyy)? ");
-        String end = scanner.next();
-        Date endDate = Date.of(end, "-");
-
-        System.out.print("Trip price? ");
-        int price = scanner.nextInt();
-
-        System.out.print("Trip type (local/abroad)? ");
+        System.out.print("Podaj cene: ");
+        double price = scanner.nextDouble();
+        System.out.print("Podaj typ podróży: (krajowy/zagraniczny)");
         String type = scanner.next();
 
-        Trip trip = null;
-        if (type.startsWith("a")) {
-            System.out.print("Trip insurance? ");
-            int insurance = scanner.nextInt();
-
-            trip = new AbroadTrip(startDate, endDate, destination);
-            trip.setPrice(price);
-            ((AbroadTrip) trip).setInsurance(insurance);
-            travelOffice.addTrip(id, trip);
-        } else {
-            System.out.print("Trip own arrival discount? ");
-            int discount = scanner.nextInt();
-
-            trip = new DomesticTrip(startDate, endDate, destination);
-            trip.setPrice(price);
-            ((DomesticTrip) trip).setOwnArrivalDiscount(discount);
-            travelOffice.addTrip(id, trip);
+        if (type.equals("krajowy")) {
+            System.out.print("Podaj kwote rabatu: ");
+            double discount = scanner.nextDouble();
+            Trip domesticTrip = new DomesticTrip(Date.of(startDate, "-"), Date.of(endDate, "-"), destination);
+            domesticTrip.setPrice(price);
+            ((DomesticTrip) domesticTrip).setOwnArrivalDiscount(discount);
+            domesticTrip.setPrice(price);
+            travelOffice.addTrip(id, domesticTrip);
+            return domesticTrip;
+        } else if (type.equals("zagraniczny")) {
+            System.out.print("Podaj kwote ubezpieczenia: ");
+            double insurance = scanner.nextDouble();
+            Trip abroadTrip = new AbroadTrip(Date.of(startDate, "-"), Date.of(endDate, "-"), destination);
+            ((AbroadTrip) abroadTrip).setInsurance(insurance);
+            abroadTrip.setPrice(price);
+            travelOffice.addTrip(id, abroadTrip);
+            return abroadTrip;
         }
-        System.out.println("Dodano wycieczke.'\n");
-        return trip;
+        else {
+            System.out.println("Niepoprawny typ podróży");
+        }
+        return null;
     }
 
     @Override
     public void assign() {
-        System.out.print("Imie klienta: ");
+        System.out.println("Podaj imie klienta: ");
         String name = scanner.next();
-
-        Customer customer = travelOffice.findCustomerByName(name);
-        if (customer == null) {
-            System.out.println("Brak klienta o imieniu '" + name + "'\n");
-            return;
-        }
-
-        System.out.print("Trip id: ");
+        System.out.println("Podaj id wycieczki: ");
         String id = scanner.next();
 
-        Trip trip = travelOffice.getTrips().get(id);
-        if (trip == null) {
-            System.out.println("Brak wycieczki o indeksie: '" + id + "'\n");
-            return;
-        }
-        customer.assignTrip(trip);
+        Customer customer = travelOffice.findCustomerByName(name);
+        Trip trip = travelOffice.trips.get(id);
 
+        if (customer == null) System.out.println("Brak  klienta o imieniu " + name);
+        if(trip == null) System.out.println("Brak wycieczki z id: " + id);
+        if (customer != null && trip != null) {
+            customer.assignTrip(trip);
+            System.out.println("Przypisano wycieczke do klienta");
+        }
     }
 
     @Override
     public boolean removeCustomer() {
-        System.out.print("Podaj imie: ");
-        String customerName = scanner.next();
+        System.out.print("Podaj imie klienta: ");
+        String name = scanner.next();
+        Customer customer = travelOffice.findCustomerByName(name);
 
-        Customer c = travelOffice.findCustomerByName(customerName);
-        if (c == null) {
-            System.out.println("No such customer has been found\n");
-            return false;
+        if (customer != null){
+            travelOffice.removeCustomer(customer);
+            return true;
         }
-        travelOffice.removeCustomer(c);
-
-        System.out.println("Customer has been removed...\n");
-        return true;
+        System.out.println("Brak klienta o imieniu: " + name);
+        return false;
     }
 
     @Override
     public boolean removeTrip() {
-        System.out.print("Enter trip id: ");
+        System.out.print("Id wycieczki: ");
         String id = scanner.next();
-        boolean success = travelOffice.removeTrip(id);
-        if (!success) {
-            System.out.println("No such trip has been found\n");
-            return false;
-        }
-        System.out.println("Trip has been removed...\n");
-        return true;
+
+        if (travelOffice.removeTrip(id)) return true;
+        System.out.println("Niepoprawne id wycieczki");
+        return false;
     }
 
     @Override
     public void showTrips() {
-        for (Map.Entry<String, Trip> entry : travelOffice.getTrips().entrySet()) {
-            System.out.println(entry.getKey() + ": " + entry.getValue());
-        }
-        System.out.println();
+        System.out.println(travelOffice.getTrips().toString());
     }
 
     @Override

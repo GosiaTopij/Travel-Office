@@ -5,10 +5,10 @@ import java.util.Scanner;
 public class Test {
     public static void main(String[] args) {
 
-        TravelOffice travelO = new TravelOffice();
-        MainHandler mainHandler = new MainHandler(travelO);
+        TravelOffice travelOffice = new TravelOffice();
+        MainHandler mainHandler = new MainHandler(travelOffice);
 
-        Scanner scan = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
         top:
         while (true) {
             System.out.println("Wybierz co chcesz zrobić: ");
@@ -21,10 +21,10 @@ public class Test {
             System.out.println("7. Pokaż wycieczki");
             System.out.println("8. Wyjdź");
             int choice;
-            if (scan.hasNextInt()) {
-                choice = scan.nextInt();
+            if (scanner.hasNextInt()) {
+                choice = scanner.nextInt();
             } else {
-                scan.next();
+                scanner.next();
                 continue;
             }
             switch (choice) {
@@ -52,10 +52,11 @@ public class Test {
                 case 8:
                     break top;
                 default:
+                    System.out.println("Wybierz poprawny numer z menu");
                     break;
             }
         }
-        scan.close();
+        scanner.close();
     }
 }
 
