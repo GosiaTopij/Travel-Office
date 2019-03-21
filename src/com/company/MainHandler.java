@@ -64,8 +64,7 @@ public class MainHandler implements UserInterface {
             abroadTrip.setPrice(price);
             travelOffice.addTrip(id, abroadTrip);
             return abroadTrip;
-        }
-        else {
+        } else {
             System.out.println("Niepoprawny typ podróży");
         }
         return null;
@@ -78,12 +77,16 @@ public class MainHandler implements UserInterface {
         System.out.println("Podaj id wycieczki: ");
         String id = scanner.next();
 
-        Customer customer = travelOffice.findCustomerByName(name);
+        Customer customer = null;
+        try {
+            customer = travelOffice.findCustomerByName(name);
+        } catch (NoSuchCustomerException e) {
+            e.printStackTrace();
+        }
         Trip trip = travelOffice.trips.get(id);
 
-        if (customer == null) System.out.println("Brak  klienta o imieniu " + name);
-        if(trip == null) System.out.println("Brak wycieczki z id: " + id);
-        if (customer != null && trip != null) {
+        if (trip == null) System.out.println("Brak wycieczki z id: " + id);
+        else {
             customer.assignTrip(trip);
             System.out.println("Przypisano wycieczke do klienta");
         }
@@ -93,14 +96,8 @@ public class MainHandler implements UserInterface {
     public boolean removeCustomer() {
         System.out.print("Podaj imie klienta: ");
         String name = scanner.next();
-        Customer customer = travelOffice.findCustomerByName(name);
-
-        if (customer != null){
-            travelOffice.removeCustomer(customer);
-            return true;
-        }
-        System.out.println("Brak klienta o imieniu: " + name);
-        return false;
+        travelOffice.getCustomers().removeIf(c -> c.toString().contains(name));
+        return true;
     }
 
     @Override
@@ -108,9 +105,13 @@ public class MainHandler implements UserInterface {
         System.out.print("Id wycieczki: ");
         String id = scanner.next();
 
-        if (travelOffice.removeTrip(id)) return true;
-        System.out.println("Niepoprawne id wycieczki");
-        return false;
+        try {
+            travelOffice.removeTrip(id);
+        } catch (NoSuchTripException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -120,6 +121,6 @@ public class MainHandler implements UserInterface {
 
     @Override
     public void showCustomers() {
-        System.out.println(travelOffice);
+        travelOffice.getCustomers().forEach(c -> System.out.println(c));
     }
 }

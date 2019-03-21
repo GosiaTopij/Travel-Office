@@ -37,28 +37,29 @@ public class TravelOffice {
         trips.put(id, trip);
     }
 
-    boolean removeTrip(String id) {
+    boolean removeTrip(String id) throws NoSuchTripException {
         if (id != null) {
-            trips.remove(id);
-            return true;
-        }
-        return false;
-    }
-
-    Customer findCustomerByName(String name) {
-        for (Customer c : customers) {
-            if (name.equals(c.getName())) {
-                return c;
+            if (trips.remove(id) == null) {
+                throw new NoSuchTripException("Brak wycieczki o podanym id");
             }
         }
-        return null;
+        throw new NoSuchTripException("Niepoprawne id wycieczki");
     }
 
-    boolean removeCustomer(Customer c) {
+    Customer findCustomerByName(String name) throws NoSuchCustomerException {
+            for (Customer c : customers) {
+                if (name.equals(c.getName())) {
+                    return c;
+                }
+            }
+            throw new NoSuchCustomerException("Brak klienta o podanym imieniu.");
+    }
+
+    boolean removeCustomer(Customer c) throws NoSuchCustomerException {
         if (c != null) {
             return customers.remove(c);
         }
-        return false;
+        throw new NoSuchCustomerException("Brak klienta.");
     }
 
     public Set<Customer> getCustomers() {
