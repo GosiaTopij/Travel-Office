@@ -1,11 +1,14 @@
 package com.company;
 
+import java.time.LocalDate;
 import java.util.Scanner;
+import java.util.logging.Logger;
 
 public class MainHandler implements UserInterface {
 
-    TravelOffice travelOffice;
-    Scanner scanner = null;
+    private static Logger logger = Logger.getLogger("com.company");
+    private TravelOffice travelOffice;
+    private Scanner scanner = null;
 
     public MainHandler(TravelOffice travelOffice) {
         this.travelOffice = travelOffice;
@@ -29,6 +32,7 @@ public class MainHandler implements UserInterface {
         travelOffice.addCustomer(customer);
 
         System.out.println("Dodano klienta.'\n");
+        logger.info("Dodano nowego klienta");
         return customer;
     }
 
@@ -50,19 +54,21 @@ public class MainHandler implements UserInterface {
         if (type.equals("krajowy")) {
             System.out.print("Podaj kwote rabatu: ");
             double discount = scanner.nextDouble();
-            Trip domesticTrip = new DomesticTrip(Date.of(startDate, "-"), Date.of(endDate, "-"), destination);
+            Trip domesticTrip = new DomesticTrip(LocalDate.parse(startDate), LocalDate.parse(endDate), destination);
             domesticTrip.setPrice(price);
             ((DomesticTrip) domesticTrip).setOwnArrivalDiscount(discount);
             domesticTrip.setPrice(price);
             travelOffice.addTrip(id, domesticTrip);
+            logger.info("Dodano nową wycieczke.");
             return domesticTrip;
         } else if (type.equals("zagraniczny")) {
             System.out.print("Podaj kwote ubezpieczenia: ");
             double insurance = scanner.nextDouble();
-            Trip abroadTrip = new AbroadTrip(Date.of(startDate, "-"), Date.of(endDate, "-"), destination);
+            Trip abroadTrip = new AbroadTrip(LocalDate.parse(startDate), LocalDate.parse(endDate), destination);
             ((AbroadTrip) abroadTrip).setInsurance(insurance);
             abroadTrip.setPrice(price);
             travelOffice.addTrip(id, abroadTrip);
+            logger.info("Dodano nową wycieczke.");
             return abroadTrip;
         } else {
             System.out.println("Niepoprawny typ podróży");
@@ -82,6 +88,7 @@ public class MainHandler implements UserInterface {
             customer = travelOffice.findCustomerByName(name);
         } catch (NoSuchCustomerException e) {
             e.printStackTrace();
+            logger.warning("NoSuchCustomerException");
         }
         Trip trip = travelOffice.trips.get(id);
 
@@ -89,6 +96,7 @@ public class MainHandler implements UserInterface {
         else {
             customer.assignTrip(trip);
             System.out.println("Przypisano wycieczke do klienta");
+            logger.info("Przypisano wycieczke do klienta.");
         }
     }
 
@@ -109,14 +117,16 @@ public class MainHandler implements UserInterface {
             travelOffice.removeTrip(id);
         } catch (NoSuchTripException e) {
             e.printStackTrace();
+            logger.warning("NoSuchTripException");
             return false;
         }
+        logger.info("Usunięto wycieczkę.");
         return true;
     }
 
     @Override
     public void showTrips() {
-        System.out.println(travelOffice.getTrips().toString());
+        travelOffice.getTrips().entrySet().forEach(e -> System.out.println(e.getKey() + ": " + e.getValue()));
     }
 
     @Override

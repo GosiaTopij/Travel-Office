@@ -1,13 +1,15 @@
 package com.company;
 
+import java.time.LocalDate;
+
 public abstract class Trip {
 
-    private Date start;
-    private Date end;
+    private LocalDate start;
+    private LocalDate end;
     private String destination;
     private double price;
 
-    public Trip(Date start, Date end, String destination) {
+    public Trip(LocalDate start, LocalDate end, String destination) {
         this.start = start;
         this.end = end;
         this.destination = destination;
@@ -31,19 +33,19 @@ public abstract class Trip {
                 '}';
     }
 
-    public Date getStart() {
+    public LocalDate getStart() {
         return start;
     }
 
-    public void setStart(Date start) {
+    public void setStart(LocalDate start) {
         this.start = start;
     }
 
-    public Date getEnd() {
+    public LocalDate getEnd() {
         return end;
     }
 
-    public void setEnd(Date end) {
+    public void setEnd(LocalDate end) {
         this.end = end;
     }
 

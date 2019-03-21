@@ -1,9 +1,11 @@
 package com.company;
 
+import java.time.LocalDate;
+
 public class AbroadTrip extends Trip {
     private double insurance;
 
-    public AbroadTrip(Date start, Date end, String destination) {
+    public AbroadTrip(LocalDate start, LocalDate end, String destination) {
         super(start, end, destination);
     }
 

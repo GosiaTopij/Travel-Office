@@ -1,0 +1,4 @@
+mar 21, 2019 3:32:52 PM com.company.MainHandler addCustomer
+INFO: Dodano nowego klienta
+mar 21, 2019 3:33:28 PM com.company.MainHandler removeTrip
+WARNING: NoSuchTripException

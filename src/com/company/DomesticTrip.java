@@ -1,9 +1,11 @@
 package com.company;
 
+import java.time.LocalDate;
+
 public class DomesticTrip extends Trip {
     private double ownArrivalDiscount;
 
-    public DomesticTrip(Date start, Date end, String destination) {
+    public DomesticTrip(LocalDate start, LocalDate end, String destination) {
         super(start, end, destination);
     }
 
