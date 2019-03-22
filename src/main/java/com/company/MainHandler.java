@@ -1,5 +1,9 @@
 package com.company;
 
+import com.exceptions.NoSuchCustomerException;
+import com.exceptions.NoSuchTripException;
+import com.services.TravelOfficeService;
+
 import java.time.LocalDate;
 import java.util.Scanner;
 import java.util.logging.Logger;
@@ -7,17 +11,17 @@ import java.util.logging.Logger;
 public class MainHandler implements UserInterface {
 
     private static Logger logger = Logger.getLogger("com.company");
-    private TravelOffice travelOffice;
+    private TravelOfficeService travelOfficeService;
     private Scanner scanner = null;
 
-    public MainHandler(TravelOffice travelOffice) {
-        this.travelOffice = travelOffice;
+    public MainHandler(TravelOfficeService travelOfficeService) {
+        this.travelOfficeService = travelOfficeService;
         scanner = new Scanner(System.in);
     }
 
     @Override
     public Customer addCustomer() {
-        System.out.print("Podaj imie: ");
+        System.out.print("Podaj imie i nazwisko: ");
         String name = scanner.next();
         System.out.print("Podaj ulice: ");
         String street = scanner.next();
@@ -29,7 +33,7 @@ public class MainHandler implements UserInterface {
         Address address = new Address(street, zip, city);
         Customer customer = new Customer(name);
         customer.setAddress(address);
-        travelOffice.addCustomer(customer);
+        travelOfficeService.addCustomer(customer);
 
         System.out.println("Dodano klienta.'\n");
         logger.info("Dodano nowego klienta");
@@ -58,7 +62,7 @@ public class MainHandler implements UserInterface {
             domesticTrip.setPrice(price);
             ((DomesticTrip) domesticTrip).setOwnArrivalDiscount(discount);
             domesticTrip.setPrice(price);
-            travelOffice.addTrip(id, domesticTrip);
+            travelOfficeService.addTrip(id, domesticTrip);
             logger.info("Dodano nową wycieczke.");
             return domesticTrip;
         } else if (type.equals("zagraniczny")) {
@@ -67,7 +71,7 @@ public class MainHandler implements UserInterface {
             Trip abroadTrip = new AbroadTrip(LocalDate.parse(startDate), LocalDate.parse(endDate), destination);
             ((AbroadTrip) abroadTrip).setInsurance(insurance);
             abroadTrip.setPrice(price);
-            travelOffice.addTrip(id, abroadTrip);
+            travelOfficeService.addTrip(id, abroadTrip);
             logger.info("Dodano nową wycieczke.");
             return abroadTrip;
         } else {
@@ -85,12 +89,13 @@ public class MainHandler implements UserInterface {
 
         Customer customer = null;
         try {
-            customer = travelOffice.findCustomerByName(name);
+            customer = travelOfficeService.findCustomerByName(name);
         } catch (NoSuchCustomerException e) {
             e.printStackTrace();
             logger.warning("NoSuchCustomerException");
         }
-        Trip trip = travelOffice.trips.get(id);
+
+        Trip trip = travelOfficeService.getTrips().get(id);
 
         if (trip == null) System.out.println("Brak wycieczki z id: " + id);
         else {
@@ -104,7 +109,15 @@ public class MainHandler implements UserInterface {
     public boolean removeCustomer() {
         System.out.print("Podaj imie klienta: ");
         String name = scanner.next();
-        travelOffice.getCustomers().removeIf(c -> c.toString().contains(name));
+        try {
+            Customer customer = travelOfficeService.findCustomerByName(name);
+            travelOfficeService.removeCustomer(customer);
+        } catch (NoSuchCustomerException e) {
+            e.printStackTrace();
+            logger.warning("NoSuchCustomerException");
+            return false;
+        }
+        logger.info("Usunięto klienta.");
         return true;
     }
 
@@ -114,7 +127,7 @@ public class MainHandler implements UserInterface {
         String id = scanner.next();
 
         try {
-            travelOffice.removeTrip(id);
+            travelOfficeService.removeTrip(id);
         } catch (NoSuchTripException e) {
             e.printStackTrace();
             logger.warning("NoSuchTripException");
@@ -126,11 +139,11 @@ public class MainHandler implements UserInterface {
 
     @Override
     public void showTrips() {
-        travelOffice.getTrips().entrySet().forEach(e -> System.out.println(e.getKey() + ": " + e.getValue()));
+        travelOfficeService.getTrips().entrySet().forEach(e -> System.out.println(e.getKey() + ": " + e.getValue()));
     }
 
     @Override
     public void showCustomers() {
-        travelOffice.getCustomers().forEach(c -> System.out.println(c));
+        travelOfficeService.getCustomers().forEach(c -> System.out.println(c));
     }
 }

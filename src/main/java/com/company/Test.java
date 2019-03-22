@@ -1,6 +1,5 @@
 package com.company;
-
-import sun.applet.Main;
+import com.services.TravelOfficeService;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -29,8 +28,8 @@ public class Test {
 
         loggerConfiguration();
 
-        TravelOffice travelOffice = new TravelOffice();
-        MainHandler mainHandler = new MainHandler(travelOffice);
+        TravelOfficeService travelOfficeService = new TravelOfficeService();
+        MainHandler mainHandler = new MainHandler(travelOfficeService);
 
         Scanner scanner = new Scanner(System.in);
         top:

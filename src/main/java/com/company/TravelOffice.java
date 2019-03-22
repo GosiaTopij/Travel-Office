@@ -1,11 +1,17 @@
 package com.company;
 
+import com.exceptions.NoSuchCustomerException;
+import com.exceptions.NoSuchTripException;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 public class TravelOffice {
+
+    private Map<String, Trip> trips = new HashMap<>();
+    private Set<Customer> customers = new HashSet<>();
 
     @Override
     public String toString() {
@@ -16,9 +22,6 @@ public class TravelOffice {
         return report;
     }
 
-    Map<String, Trip> trips = new HashMap<>();
-    Set<Customer> customers = new HashSet<>();
-
     public void addCustomer(Customer customer) {
         customers.add(customer);
     }
@@ -27,17 +30,21 @@ public class TravelOffice {
         return customers.size();
     }
 
+    public int getTripCount(){
+        return trips.size();
+    }
+
     public void getInfo() {
         for (Customer c : customers) {
             System.out.println(c);
         }
     }
 
-    void addTrip(String id, Trip trip) {
+    public void addTrip(String id, Trip trip) {
         trips.put(id, trip);
     }
 
-    boolean removeTrip(String id) throws NoSuchTripException {
+    public boolean removeTrip(String id) throws NoSuchTripException {
         if (id != null) {
             if (trips.remove(id) == null) {
                 throw new NoSuchTripException("Brak wycieczki o podanym id");
@@ -46,7 +53,7 @@ public class TravelOffice {
         throw new NoSuchTripException("Niepoprawne id wycieczki");
     }
 
-    Customer findCustomerByName(String name) throws NoSuchCustomerException {
+    public Customer findCustomerByName(String name) throws NoSuchCustomerException {
             for (Customer c : customers) {
                 if (name.equals(c.getName())) {
                     return c;
@@ -55,7 +62,7 @@ public class TravelOffice {
             throw new NoSuchCustomerException("Brak klienta o podanym imieniu.");
     }
 
-    boolean removeCustomer(Customer c) throws NoSuchCustomerException {
+    public boolean removeCustomer(Customer c) throws NoSuchCustomerException {
         if (c != null) {
             return customers.remove(c);
         }

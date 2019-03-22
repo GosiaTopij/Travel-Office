@@ -1,5 +1,4 @@
 package com.company;
-
 import java.time.LocalDate;
 
 public abstract class Trip {
