@@ -28,7 +28,7 @@ public abstract class Trip {
                 "start=" + start +
                 ", end=" + end +
                 ", destination='" + destination + '\'' +
-                ", price=" + price +
+                ", price=" + getPrice() +
                 '}';
     }
 

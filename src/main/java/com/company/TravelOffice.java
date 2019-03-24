@@ -30,7 +30,7 @@ public class TravelOffice {
         return customers.size();
     }
 
-    public int getTripCount(){
+    public int getTripCount() {
         return trips.size();
     }
 
@@ -46,35 +46,47 @@ public class TravelOffice {
 
     public boolean removeTrip(String id) throws NoSuchTripException {
         if (id != null) {
-            if (trips.remove(id) == null) {
-                throw new NoSuchTripException("Brak wycieczki o podanym id");
+            if (trips.remove(id) != null) {
+                return true;
             }
         }
-        throw new NoSuchTripException("Niepoprawne id wycieczki");
+        throw new NoSuchTripException("Brak wycieczki o podanym id.");
     }
 
     public Customer findCustomerByName(String name) throws NoSuchCustomerException {
-            for (Customer c : customers) {
-                if (name.equals(c.getName())) {
-                    return c;
+        for (Customer c : customers) {
+            if (name.equals(c.getName())) {
+                return c;
+            }
+        }
+        throw new NoSuchCustomerException("Brak klienta o podanym imieniu.");
+    }
+
+    public void findTripByDestination(String destination) throws NoSuchTripException {
+        for (Map.Entry<String, Trip> entry : trips.entrySet()) {
+            if (entry.getValue().toString().contains(destination)) {
+                System.out.println( entry.getValue());
+                return;
+            }
+        }
+        throw new NoSuchTripException("Brak wycieczki.");
+    }
+
+        public boolean removeCustomer (Customer c) throws NoSuchCustomerException {
+            if (c != null) {
+                if (customers.remove(c)) {
+                    return true;
                 }
             }
-            throw new NoSuchCustomerException("Brak klienta o podanym imieniu.");
-    }
-
-    public boolean removeCustomer(Customer c) throws NoSuchCustomerException {
-        if (c != null) {
-            return customers.remove(c);
+            throw new NoSuchCustomerException("Brak klienta.");
         }
-        throw new NoSuchCustomerException("Brak klienta.");
-    }
 
-    public Set<Customer> getCustomers() {
-        return customers;
-    }
+        public Set<Customer> getCustomers () {
+            return customers;
+        }
 
-    public Map<String, Trip> getTrips() {
-        return trips;
-    }
+        public Map<String, Trip> getTrips () {
+            return trips;
+        }
 
-}
+    }

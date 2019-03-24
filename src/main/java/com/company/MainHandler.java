@@ -5,6 +5,7 @@ import com.exceptions.NoSuchTripException;
 import com.services.TravelOfficeService;
 
 import java.time.LocalDate;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.logging.Logger;
 
@@ -21,8 +22,11 @@ public class MainHandler implements UserInterface {
 
     @Override
     public Customer addCustomer() {
-        System.out.print("Podaj imie i nazwisko: ");
-        String name = scanner.next();
+        System.out.print("Podaj imie: ");
+        String firstName = scanner.next();
+        System.out.print("Podaj nazwisko: ");
+        String lastName = scanner.next();
+        String name = firstName + " " + lastName;
         System.out.print("Podaj ulice: ");
         String street = scanner.next();
         System.out.print("Podaj kod kreskowy: ");
@@ -35,7 +39,7 @@ public class MainHandler implements UserInterface {
         customer.setAddress(address);
         travelOfficeService.addCustomer(customer);
 
-        System.out.println("Dodano klienta.'\n");
+        System.out.println("Dodano klienta.");
         logger.info("Dodano nowego klienta");
         return customer;
     }
@@ -61,17 +65,18 @@ public class MainHandler implements UserInterface {
             Trip domesticTrip = new DomesticTrip(LocalDate.parse(startDate), LocalDate.parse(endDate), destination);
             domesticTrip.setPrice(price);
             ((DomesticTrip) domesticTrip).setOwnArrivalDiscount(discount);
-            domesticTrip.setPrice(price);
             travelOfficeService.addTrip(id, domesticTrip);
+            System.out.println("Dodano wycieczke.");
             logger.info("Dodano nową wycieczke.");
             return domesticTrip;
         } else if (type.equals("zagraniczny")) {
             System.out.print("Podaj kwote ubezpieczenia: ");
             double insurance = scanner.nextDouble();
             Trip abroadTrip = new AbroadTrip(LocalDate.parse(startDate), LocalDate.parse(endDate), destination);
-            ((AbroadTrip) abroadTrip).setInsurance(insurance);
             abroadTrip.setPrice(price);
+            ((AbroadTrip) abroadTrip).setInsurance(insurance);
             travelOfficeService.addTrip(id, abroadTrip);
+            System.out.println("Dodano wycieczke.");
             logger.info("Dodano nową wycieczke.");
             return abroadTrip;
         } else {
@@ -82,8 +87,11 @@ public class MainHandler implements UserInterface {
 
     @Override
     public void assign() {
-        System.out.println("Podaj imie klienta: ");
-        String name = scanner.next();
+        System.out.print("Podaj imie: ");
+        String firstName = scanner.next();
+        System.out.print("Podaj nazwisko: ");
+        String lastName = scanner.next();
+        String name = firstName + " " + lastName;
         System.out.println("Podaj id wycieczki: ");
         String id = scanner.next();
 
@@ -107,16 +115,19 @@ public class MainHandler implements UserInterface {
 
     @Override
     public boolean removeCustomer() {
-        System.out.print("Podaj imie klienta: ");
-        String name = scanner.next();
+        System.out.print("Podaj imie: ");
+        String firstName = scanner.next();
+        System.out.print("Podaj nazwisko: ");
+        String lastName = scanner.next();
+        String name = firstName + " " + lastName;
         try {
             Customer customer = travelOfficeService.findCustomerByName(name);
             travelOfficeService.removeCustomer(customer);
         } catch (NoSuchCustomerException e) {
             e.printStackTrace();
             logger.warning("NoSuchCustomerException");
-            return false;
         }
+        System.out.println("Usunięto klienta.");
         logger.info("Usunięto klienta.");
         return true;
     }
@@ -131,10 +142,16 @@ public class MainHandler implements UserInterface {
         } catch (NoSuchTripException e) {
             e.printStackTrace();
             logger.warning("NoSuchTripException");
-            return false;
         }
+        System.out.println("Usunięto wycieczkę.");
         logger.info("Usunięto wycieczkę.");
         return true;
+    }
+
+    public void findTripByDestination() throws NoSuchTripException {
+        System.out.print("Podaj cel podróży: ");
+        String destination = scanner.next();
+        travelOfficeService.findTripByDestination(destination);
     }
 
     @Override

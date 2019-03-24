@@ -18,6 +18,6 @@ public class AbroadTrip extends Trip {
     }
 
     public double getPrice() {
-        return getPrice() + insurance;
+        return super.getPrice() + insurance;
     }
 }

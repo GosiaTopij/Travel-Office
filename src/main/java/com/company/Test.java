@@ -1,7 +1,9 @@
 package com.company;
+import com.exceptions.NoSuchTripException;
 import com.services.TravelOfficeService;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.logging.*;
@@ -24,7 +26,7 @@ public class Test {
         logger.addHandler(fileHandler);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws NoSuchTripException {
 
         loggerConfiguration();
 
@@ -42,7 +44,8 @@ public class Test {
             System.out.println("5. Usuń wycieczke");
             System.out.println("6. Pokaż klientów");
             System.out.println("7. Pokaż wycieczki");
-            System.out.println("8. Wyjdź");
+            System.out.println("8. Znajdź wycieczke po celu");
+            System.out.println("9. Wyjdź");
             int choice;
             if (scanner.hasNextInt()) {
                 choice = scanner.nextInt();
@@ -73,6 +76,9 @@ public class Test {
                     mainHandler.showTrips();
                     break;
                 case 8:
+                    mainHandler.findTripByDestination();
+                    break;
+                case 9:
                     break top;
                 default:
                     System.out.println("Wybierz poprawny numer z menu");

@@ -54,4 +54,15 @@ public class TravelOfficeServiceTest {
         travelOfficeService.removeTrip("Lalaland");
     }
 
+    @Test(expected = NoSuchCustomerException.class)
+    public void exceptionWhenRemoveCustomerWhichDoesNotExist() throws NoSuchCustomerException {
+        Customer c = new Customer("Dominik Kwiat");
+        travelOfficeService.removeCustomer(c);
+    }
+
+    @Test(expected = NoSuchTripException.class)
+    public void exceptionWhenFindTripWhichDoesNotExist() throws NoSuchTripException {
+        travelOfficeService.findTripByDestination("Lalaland");
+    }
+
 }

@@ -13,6 +13,10 @@ public class TravelOfficeService {
 
     private TravelOffice travelOffice = new TravelOffice();
 
+    public TravelOfficeService(TravelOffice travelOffice) {
+        this.travelOffice = travelOffice;
+    }
+
     public TravelOfficeService() {
     }
 
@@ -22,9 +26,6 @@ public class TravelOfficeService {
 
     public int getCustomerCount() {
         return travelOffice.getCustomerCount();
-    }
-    public TravelOfficeService(TravelOffice travelOffice) {
-        this.travelOffice = travelOffice;
     }
 
     public void addCustomer(Customer customer) {
@@ -49,6 +50,9 @@ public class TravelOfficeService {
 
     public boolean removeCustomer(Customer c) throws NoSuchCustomerException {
         return travelOffice.removeCustomer(c);
+    }
+    public void findTripByDestination(String destination) throws NoSuchTripException {
+        travelOffice.findTripByDestination(destination);
     }
 
     public Set<Customer> getCustomers() {
